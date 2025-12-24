@@ -1,0 +1,319 @@
+---
+import ChristmasTree from "../ChristmasTree.astro";
+import GiftBox from "../GiftBox.astro";
+import ImageModal from "../ImageModal.astro";
+import ChristmasMusic from "../ChristmasMusic.astro";
+import { giftBoxes, backgroundMusic } from "../christmasConfig";
+
+// 创建礼盒ID到图片路径的映射，供客户端使用
+const giftImageMap: Record<string, string> = {};
+giftBoxes.forEach(gift => {
+	giftImageMap[gift.id] = gift.image;
+});
+const giftImageMapJson = JSON.stringify(giftImageMap);
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>圣诞主题页面</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+	body {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 40%, #2d1b3d 70%, #0f1419 100%);
+		min-height: 100vh;
+		overflow-x: hidden;
+		position: relative;
+	}
+
+	/* 背景装饰 - 圣诞老人 */
+	.background-decoration {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		z-index: 0;
+		overflow: hidden;
+	}
+
+	.santa-left, .santa-right {
+		position: absolute;
+		width: 150px;
+		height: 200px;
+		opacity: 0.15;
+		filter: blur(2px);
+		animation: santa-float 8s ease-in-out infinite;
+	}
+
+	.santa-left {
+		left: 5%;
+		bottom: 10%;
+		animation-delay: 0s;
+	}
+
+	.santa-right {
+		right: 5%;
+		bottom: 15%;
+		animation-delay: 4s;
+	}
+
+	@keyframes santa-float {
+		0%, 100% {
+			transform: translateY(0) scale(1);
+		}
+		50% {
+			transform: translateY(-20px) scale(1.05);
+		}
+	}
+
+	/* 雪花动画 - 增强效果 */
+	.snowflakes {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		z-index: 1;
+		overflow: hidden;
+	}
+
+	.snowflake {
+		position: absolute;
+		color: #fff;
+		font-size: 1em;
+		font-family: Arial, sans-serif;
+		text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.5);
+		animation: snowfall linear infinite;
+		opacity: 0.9;
+		font-weight: bold;
+	}
+
+	.snowflake.small {
+		font-size: 0.8em;
+		opacity: 0.7;
+	}
+
+	.snowflake.medium {
+		font-size: 1.2em;
+		opacity: 0.85;
+	}
+
+	.snowflake.large {
+		font-size: 1.5em;
+		opacity: 0.95;
+	}
+
+	@keyframes snowfall {
+		0% {
+			transform: translateY(-10vh) translateX(0) rotate(0deg);
+			opacity: 0;
+		}
+		10% {
+			opacity: 0.9;
+		}
+		50% {
+			transform: translateY(50vh) translateX(15px) rotate(180deg);
+		}
+		90% {
+			opacity: 0.9;
+		}
+		100% {
+			transform: translateY(110vh) translateX(-15px) rotate(360deg);
+			opacity: 0;
+		}
+	}
+
+		/* 主容器 */
+		.main-container {
+			position: relative;
+			width: 100%;
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+			z-index: 2;
+		}
+
+		/* 圣诞老人 SVG 装饰 */
+		.santa-svg {
+			width: 100%;
+			height: 100%;
+		}
+
+		/* 标题 */
+		.page-title {
+			color: #fff;
+			font-size: 2.5rem;
+			margin-bottom: 30px;
+			text-align: center;
+			text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+			animation: title-glow 2s ease-in-out infinite;
+		}
+
+		@keyframes title-glow {
+			0%, 100% {
+				text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+			}
+			50% {
+				text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.6);
+			}
+		}
+
+		/* 场景容器 */
+		.scene-container {
+			position: relative;
+			width: 100%;
+			max-width: 1200px;
+			height: 80vh;
+			min-height: 600px;
+		}
+
+		/* 响应式设计 */
+		@media (max-width: 768px) {
+			.page-title {
+				font-size: 1.8rem;
+				margin-bottom: 20px;
+			}
+
+			.scene-container {
+				height: 70vh;
+				min-height: 500px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- 背景装饰 - 圣诞老人 -->
+	<div class="background-decoration">
+		<svg class="santa-svg santa-left" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+			<!-- 圣诞老人身体 -->
+			<ellipse cx="100" cy="180" rx="60" ry="50" fill="#c41e3a"/>
+			<!-- 头部 -->
+			<circle cx="100" cy="100" r="45" fill="#ffdbac"/>
+			<!-- 帽子 -->
+			<path d="M60 100 Q100 50 140 100 L135 120 Q100 70 65 120 Z" fill="#c41e3a"/>
+			<circle cx="100" cy="80" r="15" fill="#fff"/>
+			<!-- 胡子 -->
+			<path d="M85 120 Q100 140 115 120 Q100 135 85 120" fill="#fff"/>
+			<!-- 眼睛 -->
+			<circle cx="90" cy="105" r="3" fill="#000"/>
+			<circle cx="110" cy="105" r="3" fill="#000"/>
+			<!-- 腰带 -->
+			<rect x="60" y="175" width="80" height="10" fill="#000"/>
+		</svg>
+		<svg class="santa-svg santa-right" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+			<!-- 圣诞老人身体 -->
+			<ellipse cx="100" cy="180" rx="60" ry="50" fill="#c41e3a"/>
+			<!-- 头部 -->
+			<circle cx="100" cy="100" r="45" fill="#ffdbac"/>
+			<!-- 帽子 -->
+			<path d="M60 100 Q100 50 140 100 L135 120 Q100 70 65 120 Z" fill="#c41e3a"/>
+			<circle cx="100" cy="80" r="15" fill="#fff"/>
+			<!-- 胡子 -->
+			<path d="M85 120 Q100 140 115 120 Q100 135 85 120" fill="#fff"/>
+			<!-- 眼睛 -->
+			<circle cx="90" cy="105" r="3" fill="#000"/>
+			<circle cx="110" cy="105" r="3" fill="#000"/>
+			<!-- 腰带 -->
+			<rect x="60" y="175" width="80" height="10" fill="#000"/>
+		</svg>
+	</div>
+
+	<!-- 雪花动画 -->
+	<div class="snowflakes" id="snowflakes"></div>
+
+	<!-- 主容器 -->
+	<div class="main-container">
+		<h1 class="page-title">🎄 圣诞快乐 🎄</h1>
+		
+		<!-- 场景容器 -->
+		<div class="scene-container">
+			<!-- 圣诞树 -->
+			<ChristmasTree />
+
+			<!-- 礼盒 -->
+			{giftBoxes.map((gift) => (
+				<GiftBox gift={gift} />
+			))}
+		</div>
+	</div>
+
+	<!-- 图片模态框 -->
+	<ImageModal imageUrl="" onClose="window.closeImageModal" />
+
+	<!-- 背景音乐 -->
+	<ChristmasMusic musicUrl={backgroundMusic} />
+
+	<script define:vars={{ giftImageMapJson }}>
+		// 生成雪花 - 增强版
+		function createSnowflakes() {
+			const snowflakesContainer = document.getElementById('snowflakes');
+			if (!snowflakesContainer) return;
+
+			const snowflakeSymbols = ['❄', '❅', '❆', '✻', '✼', '❉', '✦', '✧'];
+			const numSnowflakes = 80; // 增加雪花数量
+
+			for (let i = 0; i < numSnowflakes; i++) {
+				const snowflake = document.createElement('div');
+				const size = Math.random();
+				if (size < 0.33) {
+					snowflake.className = 'snowflake small';
+				} else if (size < 0.66) {
+					snowflake.className = 'snowflake medium';
+				} else {
+					snowflake.className = 'snowflake large';
+				}
+				
+				snowflake.textContent = snowflakeSymbols[Math.floor(Math.random() * snowflakeSymbols.length)];
+				snowflake.style.left = Math.random() * 100 + '%';
+				const fallDuration = (Math.random() * 5 + 3) + 's';
+				const delay = Math.random() * 5 + 's';
+				snowflake.style.animation = `snowfall ${fallDuration} linear ${delay} infinite`;
+				
+				snowflakesContainer.appendChild(snowflake);
+			}
+		}
+
+		// 礼盒点击事件
+		document.addEventListener('DOMContentLoaded', () => {
+			createSnowflakes();
+
+			// 从服务端配置获取图片路径映射
+			const giftImageMap = JSON.parse(giftImageMapJson);
+
+			const giftBoxes = document.querySelectorAll('.gift-box');
+			giftBoxes.forEach((box) => {
+				box.addEventListener('click', () => {
+					const giftId = box.getAttribute('data-gift-id');
+					if (giftId && window.showImageModal) {
+						// 从配置中获取图片路径
+						const imageUrl = giftImageMap[giftId];
+						if (imageUrl) {
+							window.showImageModal(imageUrl);
+						}
+					}
+					
+					// 添加点击动画
+					box.classList.add('animating');
+					setTimeout(() => {
+						box.classList.remove('animating');
+					}, 500);
+				});
+			});
+		});
+	</script>
+</body>
+</html>
