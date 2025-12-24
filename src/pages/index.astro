@@ -28,10 +28,41 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 
 	body {
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-		background: linear-gradient(180deg, #0a0e27 0%, #1a1f3a 40%, #2d1b3d 70%, #0f1419 100%);
+		background: 
+			radial-gradient(ellipse at top, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
+			radial-gradient(ellipse at bottom left, rgba(178, 34, 34, 0.15) 0%, transparent 50%),
+			radial-gradient(ellipse at bottom right, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+			linear-gradient(180deg, #5C0000 0%, #6B0000 20%, #7A0000 40%, #8B0000 60%, #6B0000 80%, #5C0000 100%);
+		background-attachment: fixed;
 		min-height: 100vh;
 		overflow-x: hidden;
 		position: relative;
+	}
+
+	/* 添加背景光效 */
+	body::before {
+		content: '';
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: 
+			radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
+			radial-gradient(circle at 80% 70%, rgba(255, 69, 0, 0.08) 0%, transparent 40%),
+			radial-gradient(circle at 50% 50%, rgba(220, 20, 60, 0.06) 0%, transparent 60%);
+		pointer-events: none;
+		z-index: 0;
+		animation: background-shimmer 8s ease-in-out infinite;
+	}
+
+	@keyframes background-shimmer {
+		0%, 100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.7;
+		}
 	}
 
 	/* 背景装饰 - 圣诞老人 */
@@ -42,7 +73,7 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 		width: 100%;
 		height: 100%;
 		pointer-events: none;
-		z-index: 0;
+		z-index: 1;
 		overflow: hidden;
 	}
 
@@ -84,7 +115,7 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 		width: 100%;
 		height: 100%;
 		pointer-events: none;
-		z-index: 1;
+		z-index: 2;
 		overflow: hidden;
 	}
 
@@ -144,7 +175,7 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 			align-items: center;
 			justify-content: center;
 			padding: 20px;
-			z-index: 2;
+			z-index: 3;
 		}
 
 		/* 圣诞老人 SVG 装饰 */
@@ -179,6 +210,9 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 			max-width: 1200px;
 			height: 80vh;
 			min-height: 600px;
+			background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+			border-radius: 20px;
+			padding: 20px;
 		}
 
 		/* 响应式设计 */
@@ -287,9 +321,64 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 			}
 		}
 
+		// 颜色提取工具（用于提取图片背景色）
+		function extractImageColor() {
+			const img = new Image();
+			img.crossOrigin = 'anonymous';
+			img.src = '/assets/tree.jpg';
+			img.onload = function() {
+				const canvas = document.createElement('canvas');
+				const ctx = canvas.getContext('2d');
+				canvas.width = img.width;
+				canvas.height = img.height;
+				ctx.drawImage(img, 0, 0);
+				
+				// 从图片四个角落采样颜色
+				const corners = [
+					[0, 0], // 左上
+					[img.width - 1, 0], // 右上
+					[0, img.height - 1], // 左下
+					[img.width - 1, img.height - 1] // 右下
+				];
+				
+				const colors = corners.map(([x, y]) => {
+					const pixel = ctx.getImageData(x, y, 1, 1).data;
+					return `rgb(${pixel[0]}, ${pixel[1]}, ${pixel[2]})`;
+				});
+				
+				// 计算平均颜色
+				const avgColor = corners.reduce((acc, [x, y]) => {
+					const pixel = ctx.getImageData(x, y, 1, 1).data;
+					return {
+						r: acc.r + pixel[0],
+						g: acc.g + pixel[1],
+						b: acc.b + pixel[2]
+					};
+				}, { r: 0, g: 0, b: 0 });
+				
+				const avgR = Math.round(avgColor.r / 4);
+				const avgG = Math.round(avgColor.g / 4);
+				const avgB = Math.round(avgColor.b / 4);
+				
+				// 转换为十六进制
+				const hex = '#' + [avgR, avgG, avgB].map(x => {
+					const hex = x.toString(16);
+					return hex.length === 1 ? '0' + hex : hex;
+				}).join('');
+				
+				console.log('提取的背景颜色:', hex, `rgb(${avgR}, ${avgG}, ${avgB})`);
+				console.log('角落颜色:', colors);
+				
+				// 可以在这里自动更新背景色
+				// document.body.style.background = `linear-gradient(180deg, ${hex} 0%, ${hex}dd 50%, ${hex}bb 100%)`;
+			};
+		}
+
 		// 礼盒点击事件
 		document.addEventListener('DOMContentLoaded', () => {
 			createSnowflakes();
+			// 取消注释下面这行来提取图片背景色
+			// extractImageColor();
 
 			// 从服务端配置获取图片路径映射
 			const giftImageMap = JSON.parse(giftImageMapJson);

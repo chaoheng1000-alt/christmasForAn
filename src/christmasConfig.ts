@@ -63,5 +63,5 @@ export const giftBoxes: GiftBox[] = [
 ];
 
 // 背景音乐配置（可选）
-export const backgroundMusic = "/assets/christmas-music.mp3"; // 将音乐文件放在 assets/ 目录下
+export const backgroundMusic = "/assets/Anson Seabra-Christmas List.mp3"; // 将音乐文件放在 assets/ 目录下
 
