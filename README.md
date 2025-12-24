@@ -13,23 +13,24 @@ src/
 pages/
 └── christmas.astro        # 主页面
 
-assets/                    # 静态资源目录
-├── gift-1.jpg           # 礼盒图片 1
-├── gift-2.jpg           # 礼盒图片 2
-├── gift-3.jpg           # 礼盒图片 3
-├── gift-4.jpg           # 礼盒图片 4
-├── gift-5.jpg           # 礼盒图片 5
-├── gift-6.jpg           # 礼盒图片 6
-├── gift-7.jpg           # 礼盒图片 7
-├── gift-8.jpg           # 礼盒图片 8
-└── christmas-music.mp3  # 背景音乐（可选）
+public/                    # 静态资源目录（Astro 会自动处理）
+└── assets/               # 静态资源子目录
+    ├── gift-1.jpg       # 礼盒图片 1
+    ├── gift-2.jpg       # 礼盒图片 2
+    ├── gift-3.jpg       # 礼盒图片 3
+    ├── gift-4.jpg       # 礼盒图片 4
+    ├── gift-5.jpg       # 礼盒图片 5
+    ├── gift-6.jpg       # 礼盒图片 6
+    ├── gift-7.jpg       # 礼盒图片 7
+    ├── gift-8.jpg       # 礼盒图片 8
+    └── christmas-music.mp3  # 背景音乐（可选）
 ```
 
 ## 🎯 使用步骤
 
 ### 1. 添加图片
 
-将你的礼盒图片放入 `assets/` 目录，命名为：
+将你的礼盒图片放入 `public/assets/` 目录，命名为：
 - `gift-1.jpg`
 - `gift-2.jpg`
 - `gift-3.jpg`
@@ -53,13 +54,52 @@ export const giftBoxes: GiftBox[] = [
 
 ### 3. 添加背景音乐（可选）
 
-将圣诞主题音乐文件放入 `assets/` 目录，命名为 `christmas-music.mp3`。
+将圣诞主题音乐文件放入 `public/assets/` 目录，命名为 `christmas-music.mp3`。
 
 如果不需要背景音乐，可以修改 `christmasConfig.ts` 中的 `backgroundMusic` 为空字符串。
 
 ### 4. 访问页面
 
 启动开发服务器后，访问：`http://localhost:4321/christmas`
+
+## 🚀 GitHub Pages 部署
+
+### 部署步骤
+
+1. **安装依赖**：
+   ```bash
+   npm install
+   ```
+
+2. **本地测试**：
+   ```bash
+   npm run dev
+   ```
+
+3. **构建项目**：
+   ```bash
+   npm run build
+   ```
+
+4. **配置 GitHub Pages**：
+   - 如果部署在仓库根路径（如 `username.github.io`），保持 `astro.config.mjs` 默认配置
+   - 如果部署在子路径（如 `username.github.io/repo-name`），需要修改 `astro.config.mjs`：
+     ```javascript
+     export default defineConfig({
+       base: '/repo-name',  // 替换为你的仓库名
+       site: 'https://username.github.io',  // 替换为你的用户名
+       output: 'static',
+     });
+     ```
+
+5. **启用 GitHub Actions**：
+   - 在 GitHub 仓库的 Settings → Pages 中
+   - Source 选择 "GitHub Actions"
+   - 推送代码到 `main` 或 `master` 分支后，GitHub Actions 会自动构建和部署
+
+6. **访问网站**：
+   - 根路径部署：`https://username.github.io`
+   - 子路径部署：`https://username.github.io/repo-name/christmas`
 
 ## 🎨 自定义配置
 
