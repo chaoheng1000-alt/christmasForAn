@@ -7,7 +7,7 @@ export interface GiftBox {
 		top: string; // CSS top 值，例如 "15%"
 		left: string; // CSS left 值，例如 "45%"
 	};
-	image: string; // 图片路径，放在 public/christmas/ 目录下
+	image: string; // 图片路径，放在 assets/ 目录下
 	label?: string; // 可选：礼盒标签
 }
 
@@ -15,53 +15,53 @@ export const giftBoxes: GiftBox[] = [
 	{
 		id: "gift-1",
 		position: { top: "25%", left: "48%" },
-		image: "/christmas/gift-1.jpg",
+		image: "/assets/gift-1.jpg",
 		label: "礼物 1"
 	},
 	{
 		id: "gift-2",
 		position: { top: "35%", left: "42%" },
-		image: "/christmas/gift-2.jpg",
+		image: "/assets/gift-2.jpg",
 		label: "礼物 2"
 	},
 	{
 		id: "gift-3",
 		position: { top: "35%", left: "54%" },
-		image: "/christmas/gift-3.jpg",
+		image: "/assets/gift-3.jpg",
 		label: "礼物 3"
 	},
 	{
 		id: "gift-4",
 		position: { top: "45%", left: "40%" },
-		image: "/christmas/gift-4.jpg",
+		image: "/assets/gift-4.jpg",
 		label: "礼物 4"
 	},
 	{
 		id: "gift-5",
 		position: { top: "45%", left: "52%" },
-		image: "/christmas/gift-5.jpg",
+		image: "/assets/gift-5.jpg",
 		label: "礼物 5"
 	},
 	{
 		id: "gift-6",
 		position: { top: "55%", left: "38%" },
-		image: "/christmas/gift-6.jpg",
+		image: "/assets/gift-6.jpg",
 		label: "礼物 6"
 	},
 	{
 		id: "gift-7",
 		position: { top: "55%", left: "50%" },
-		image: "/christmas/gift-7.jpg",
+		image: "/assets/gift-7.jpg",
 		label: "礼物 7"
 	},
 	{
 		id: "gift-8",
 		position: { top: "55%", left: "58%" },
-		image: "/christmas/gift-8.jpg",
+		image: "/assets/gift-8.jpg",
 		label: "礼物 8"
 	}
 ];
 
 // 背景音乐配置（可选）
-export const backgroundMusic = "/christmas/christmas-music.mp3"; // 将音乐文件放在 public/christmas/ 目录下
+export const backgroundMusic = "/assets/christmas-music.mp3"; // 将音乐文件放在 assets/ 目录下
 
