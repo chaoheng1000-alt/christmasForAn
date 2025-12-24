@@ -4,6 +4,13 @@ import ImageModal from "../ImageModal.astro";
 import ChristmasMusic from "../ChristmasMusic.astro";
 import { giftBoxes, backgroundMusic } from "../christmasConfig";
 
+// 获取 base URL，用于处理静态资源路径
+// 确保路径正确包含 base
+const baseUrl = import.meta.env.BASE_URL;
+// 确保 baseUrl 以 / 结尾（除非是根路径）
+const normalizedBase = baseUrl === '/' ? '' : (baseUrl.endsWith('/') ? baseUrl : baseUrl + '/');
+const treeImageUrl = `${normalizedBase}assets/tree.jpg`;
+
 // 创建礼盒ID到图片路径的映射，供客户端使用
 const giftImageMap: Record<string, string> = {};
 giftBoxes.forEach(gift => {
@@ -27,7 +34,6 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 
 	body {
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-		background: url('/assets/tree.jpg') center center / cover no-repeat fixed;
 		background-color: #4E2122; /* 备用背景色，图片加载前的占位 */
 		min-height: 100vh;
 		overflow-x: hidden;
@@ -176,7 +182,7 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 		}
 	</style>
 </head>
-<body>
+<body style={`background: url('${treeImageUrl}') center center / cover no-repeat fixed;`}>
 	<!-- 雪花动画 -->
 	<div class="snowflakes" id="snowflakes"></div>
 
@@ -233,7 +239,7 @@ const giftImageMapJson = JSON.stringify(giftImageMap);
 		function extractImageColor() {
 			const img = new Image();
 			img.crossOrigin = 'anonymous';
-			img.src = '/assets/tree.jpg';
+			img.src = '{treeImageUrl}'; // treeImageUrl 已经包含了 base URL
 			img.onload = function() {
 				const canvas = document.createElement('canvas');
 				const ctx = canvas.getContext('2d');
