@@ -36,9 +36,53 @@ const { musicUrl } = Astro.props;
 	let isPlaying = false;
 
 	if (music && toggleButton && musicControl) {
-		// 默认静音，需要用户交互后才能播放
+		// 设置音量
 		music.volume = 0.5;
 
+		// 尝试自动播放
+		function tryAutoPlay() {
+			if (music && !isPlaying) {
+				const playPromise = music.play();
+				if (playPromise !== undefined) {
+					playPromise
+						.then(() => {
+							// 自动播放成功
+							isPlaying = true;
+							musicControl?.classList.add('playing');
+							console.log('音乐自动播放成功');
+						})
+						.catch(err => {
+							// 自动播放失败（通常是浏览器策略阻止）
+							console.log('自动播放被阻止，需要用户交互:', err);
+							// 如果自动播放失败，尝试在用户首次交互时播放
+							const enableAutoPlay = () => {
+								music.play()
+									.then(() => {
+										isPlaying = true;
+										musicControl?.classList.add('playing');
+									})
+									.catch(e => console.log('播放失败:', e));
+								// 移除事件监听器，只执行一次
+								document.removeEventListener('click', enableAutoPlay);
+								document.removeEventListener('touchstart', enableAutoPlay);
+							};
+							document.addEventListener('click', enableAutoPlay, { once: true });
+							document.addEventListener('touchstart', enableAutoPlay, { once: true });
+						});
+				}
+			}
+		}
+
+		// 页面加载完成后尝试自动播放
+		if (document.readyState === 'complete') {
+			tryAutoPlay();
+		} else {
+			window.addEventListener('load', tryAutoPlay);
+			// 也尝试在 DOMContentLoaded 时播放（更早）
+			document.addEventListener('DOMContentLoaded', tryAutoPlay);
+		}
+
+		// 切换播放/暂停
 		toggleButton.addEventListener('click', () => {
 			if (isPlaying) {
 				music.pause();
