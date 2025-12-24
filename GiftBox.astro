@@ -1,0 +1,158 @@
+---
+import type { GiftBox } from "./christmasConfig";
+
+interface Props {
+	gift: GiftBox;
+}
+
+const { gift } = Astro.props;
+---
+
+<div 
+	class="gift-box" 
+	data-gift-id={gift.id}
+	style={`top: ${gift.position.top}; left: ${gift.position.left};`}
+>
+	<div class="gift-box__ribbon"></div>
+	<div class="gift-box__bow">
+		<div class="bow-center"></div>
+		<div class="bow-loop bow-loop-left"></div>
+		<div class="bow-loop bow-loop-right"></div>
+	</div>
+	{gift.label && <span class="gift-box__label">{gift.label}</span>}
+</div>
+
+<style>
+	.gift-box {
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		cursor: pointer;
+		transform: translate(-50%, -50%);
+		transition: all 0.3s ease;
+		z-index: 20;
+	}
+
+	.gift-box:hover {
+		transform: translate(-50%, -50%) scale(1.15);
+		filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+	}
+
+	.gift-box:active {
+		transform: translate(-50%, -50%) scale(1.05);
+	}
+
+	/* 礼盒主体 */
+	.gift-box::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, #c41e3a 0%, #8b1538 100%);
+		border-radius: 4px;
+		box-shadow: 
+			0 4px 8px rgba(0, 0, 0, 0.3),
+			inset 0 2px 4px rgba(255, 255, 255, 0.2),
+			inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+	}
+
+	/* 礼盒盖子 */
+	.gift-box::after {
+		content: '';
+		position: absolute;
+		top: -8px;
+		left: 0;
+		width: 100%;
+		height: 12px;
+		background: linear-gradient(135deg, #dc3545 0%, #a01d2e 100%);
+		border-radius: 4px 4px 0 0;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	}
+
+	/* 丝带 */
+	.gift-box__ribbon {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: 100%;
+		height: 8px;
+		background: linear-gradient(90deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+		transform: translateY(-50%);
+		box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+	}
+
+	/* 蝴蝶结 */
+	.gift-box__bow {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 20px;
+		height: 20px;
+		z-index: 1;
+	}
+
+	.bow-center {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 12px;
+		height: 12px;
+		background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+		border-radius: 50%;
+		box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+	}
+
+	.bow-loop {
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		border: 3px solid #FFD700;
+		border-radius: 50% 50% 50% 0;
+		background: rgba(255, 215, 0, 0.3);
+		box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+	}
+
+	.bow-loop-left {
+		top: 0;
+		left: -4px;
+		transform: rotate(-45deg);
+	}
+
+	.bow-loop-right {
+		top: 0;
+		right: -4px;
+		transform: rotate(45deg) scaleX(-1);
+	}
+
+	/* 标签 */
+	.gift-box__label {
+		position: absolute;
+		bottom: -20px;
+		left: 50%;
+		transform: translateX(-50%);
+		font-size: 10px;
+		color: #fff;
+		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+		white-space: nowrap;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.gift-box:hover .gift-box__label {
+		opacity: 1;
+	}
+
+	/* 点击动画 */
+	@keyframes gift-open {
+		0% { transform: translate(-50%, -50%) scale(1); }
+		50% { transform: translate(-50%, -50%) scale(1.2) rotate(5deg); }
+		100% { transform: translate(-50%, -50%) scale(1); }
+	}
+
+	.gift-box.animating {
+		animation: gift-open 0.5s ease;
+	}
+</style>
+

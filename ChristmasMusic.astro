@@ -1,0 +1,198 @@
+---
+interface Props {
+	musicUrl: string;
+}
+
+const { musicUrl } = Astro.props;
+---
+
+<audio id="christmasMusic" loop preload="auto">
+	<source src={musicUrl} type="audio/mpeg" />
+	您的浏览器不支持音频播放。
+</audio>
+
+<div class="music-control" id="musicControl">
+	<button class="music-control__button" id="musicToggle" aria-label="播放/暂停音乐">
+		<svg class="music-icon music-icon--play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<polygon points="5 3 19 12 5 21 5 3"></polygon>
+		</svg>
+		<svg class="music-icon music-icon--pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<rect x="6" y="4" width="4" height="16"></rect>
+			<rect x="14" y="4" width="4" height="16"></rect>
+		</svg>
+	</button>
+	<div class="music-control__wave">
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+</div>
+
+<script>
+	const music = document.getElementById('christmasMusic') as HTMLAudioElement;
+	const toggleButton = document.getElementById('musicToggle');
+	const musicControl = document.getElementById('musicControl');
+	let isPlaying = false;
+
+	if (music && toggleButton && musicControl) {
+		// 默认静音，需要用户交互后才能播放
+		music.volume = 0.5;
+
+		toggleButton.addEventListener('click', () => {
+			if (isPlaying) {
+				music.pause();
+				isPlaying = false;
+				musicControl.classList.remove('playing');
+			} else {
+				music.play().catch(err => {
+					console.log('音频播放失败:', err);
+				});
+				isPlaying = true;
+				musicControl.classList.add('playing');
+			}
+		});
+
+		// 监听播放状态
+		music.addEventListener('play', () => {
+			isPlaying = true;
+			musicControl?.classList.add('playing');
+		});
+
+		music.addEventListener('pause', () => {
+			isPlaying = false;
+			musicControl?.classList.remove('playing');
+		});
+	}
+</script>
+
+<style>
+	.music-control {
+		position: fixed;
+		bottom: 30px;
+		right: 30px;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		z-index: 1000;
+		background: rgba(255, 255, 255, 0.1);
+		backdrop-filter: blur(10px);
+		padding: 12px 16px;
+		border-radius: 50px;
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		transition: all 0.3s ease;
+	}
+
+	.music-control:hover {
+		background: rgba(255, 255, 255, 0.15);
+		transform: translateY(-2px);
+		box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+	}
+
+	.music-control__button {
+		width: 40px;
+		height: 40px;
+		border: none;
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 50%;
+		color: #fff;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s ease;
+	}
+
+	.music-control__button:hover {
+		background: rgba(255, 255, 255, 0.3);
+		transform: scale(1.1);
+	}
+
+	.music-icon {
+		width: 20px;
+		height: 20px;
+		position: absolute;
+		transition: opacity 0.2s ease;
+	}
+
+	.music-icon--pause {
+		opacity: 0;
+	}
+
+	.music-control.playing .music-icon--play {
+		opacity: 0;
+	}
+
+	.music-control.playing .music-icon--pause {
+		opacity: 1;
+	}
+
+	.music-control__wave {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		height: 20px;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.music-control.playing .music-control__wave {
+		opacity: 1;
+	}
+
+	.music-control__wave span {
+		width: 3px;
+		background: #fff;
+		border-radius: 2px;
+		animation: wave 1.2s ease-in-out infinite;
+	}
+
+	.music-control__wave span:nth-child(1) {
+		height: 8px;
+		animation-delay: 0s;
+	}
+
+	.music-control__wave span:nth-child(2) {
+		height: 16px;
+		animation-delay: 0.2s;
+	}
+
+	.music-control__wave span:nth-child(3) {
+		height: 12px;
+		animation-delay: 0.4s;
+	}
+
+	.music-control__wave span:nth-child(4) {
+		height: 10px;
+		animation-delay: 0.6s;
+	}
+
+	@keyframes wave {
+		0%, 100% {
+			transform: scaleY(0.5);
+		}
+		50% {
+			transform: scaleY(1);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.music-control {
+			bottom: 20px;
+			right: 20px;
+			padding: 10px 14px;
+		}
+
+		.music-control__button {
+			width: 36px;
+			height: 36px;
+		}
+
+		.music-icon {
+			width: 18px;
+			height: 18px;
+		}
+	}
+</style>
+

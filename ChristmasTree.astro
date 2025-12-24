@@ -1,0 +1,278 @@
+---
+// 精美的圣诞树组件
+---
+
+<div class="christmas-tree-container">
+	<!-- 圣诞树主体 -->
+	<div class="christmas-tree">
+		<!-- 树顶星星 -->
+		<div class="tree-star">
+			<svg viewBox="0 0 100 100" class="star-svg">
+				<path d="M50 10 L55 40 L85 40 L60 55 L70 85 L50 65 L30 85 L40 55 L15 40 L45 40 Z" 
+					fill="#FFD700" stroke="#FFA500" stroke-width="2"/>
+			</svg>
+		</div>
+
+		<!-- 第一层（顶部） -->
+		<div class="tree-layer layer-1">
+			<div class="tree-branch"></div>
+		</div>
+
+		<!-- 第二层 -->
+		<div class="tree-layer layer-2">
+			<div class="tree-branch"></div>
+		</div>
+
+		<!-- 第三层 -->
+		<div class="tree-layer layer-3">
+			<div class="tree-branch"></div>
+		</div>
+
+		<!-- 第四层 -->
+		<div class="tree-layer layer-4">
+			<div class="tree-branch"></div>
+		</div>
+
+		<!-- 第五层（底部） -->
+		<div class="tree-layer layer-5">
+			<div class="tree-branch"></div>
+		</div>
+
+		<!-- 树干 -->
+		<div class="tree-trunk"></div>
+
+		<!-- 装饰灯 -->
+		<div class="tree-lights">
+			<div class="light light-1"></div>
+			<div class="light light-2"></div>
+			<div class="light light-3"></div>
+			<div class="light light-4"></div>
+			<div class="light light-5"></div>
+			<div class="light light-6"></div>
+			<div class="light light-7"></div>
+			<div class="light light-8"></div>
+			<div class="light light-9"></div>
+			<div class="light light-10"></div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.christmas-tree-container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.christmas-tree {
+		position: relative;
+		width: 400px;
+		height: 600px;
+		margin: 0 auto;
+	}
+
+	/* 树顶星星 */
+	.tree-star {
+		position: absolute;
+		top: -30px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 60px;
+		height: 60px;
+		z-index: 10;
+		animation: star-twinkle 2s ease-in-out infinite;
+	}
+
+	.star-svg {
+		width: 100%;
+		height: 100%;
+		filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+	}
+
+	@keyframes star-twinkle {
+		0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+		50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
+	}
+
+	/* 树层 */
+	.tree-layer {
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.tree-branch {
+		position: relative;
+		width: 0;
+		height: 0;
+		border-left: solid transparent;
+		border-right: solid transparent;
+		border-bottom: solid;
+	}
+
+	/* 第一层 */
+	.layer-1 {
+		top: 20px;
+	}
+
+	.layer-1 .tree-branch {
+		border-left-width: 60px;
+		border-right-width: 60px;
+		border-bottom-width: 80px;
+		border-bottom-color: #0d5d1a;
+		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+	}
+
+	/* 第二层 */
+	.layer-2 {
+		top: 80px;
+	}
+
+	.layer-2 .tree-branch {
+		border-left-width: 80px;
+		border-right-width: 80px;
+		border-bottom-width: 100px;
+		border-bottom-color: #0f6b1f;
+		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+	}
+
+	/* 第三层 */
+	.layer-3 {
+		top: 160px;
+	}
+
+	.layer-3 .tree-branch {
+		border-left-width: 100px;
+		border-right-width: 100px;
+		border-bottom-width: 120px;
+		border-bottom-color: #0d5d1a;
+		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+	}
+
+	/* 第四层 */
+	.layer-4 {
+		top: 260px;
+	}
+
+	.layer-4 .tree-branch {
+		border-left-width: 120px;
+		border-right-width: 120px;
+		border-bottom-width: 140px;
+		border-bottom-color: #0f6b1f;
+		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+	}
+
+	/* 第五层 */
+	.layer-5 {
+		top: 380px;
+	}
+
+	.layer-5 .tree-branch {
+		border-left-width: 140px;
+		border-right-width: 140px;
+		border-bottom-width: 160px;
+		border-bottom-color: #0d5d1a;
+		filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+	}
+
+	/* 树干 */
+	.tree-trunk {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 50px;
+		height: 80px;
+		background: linear-gradient(90deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
+		border-radius: 8px 8px 0 0;
+		box-shadow: inset -5px 0 10px rgba(0, 0, 0, 0.3),
+					inset 5px 0 10px rgba(0, 0, 0, 0.3),
+					0 4px 8px rgba(0, 0, 0, 0.4);
+	}
+
+	/* 装饰灯 */
+	.tree-lights {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.light {
+		position: absolute;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+		animation: light-flicker 2s ease-in-out infinite;
+	}
+
+	.light-1 { top: 15%; left: 48%; color: #ff6b6b; animation-delay: 0s; }
+	.light-2 { top: 25%; left: 42%; color: #4ecdc4; animation-delay: 0.2s; }
+	.light-3 { top: 25%; left: 54%; color: #ffe66d; animation-delay: 0.4s; }
+	.light-4 { top: 35%; left: 40%; color: #ff6b6b; animation-delay: 0.6s; }
+	.light-5 { top: 35%; left: 52%; color: #95e1d3; animation-delay: 0.8s; }
+	.light-6 { top: 45%; left: 38%; color: #ffe66d; animation-delay: 1s; }
+	.light-7 { top: 45%; left: 50%; color: #ff6b6b; animation-delay: 1.2s; }
+	.light-8 { top: 45%; left: 58%; color: #4ecdc4; animation-delay: 1.4s; }
+	.light-9 { top: 55%; left: 36%; color: #ffe66d; animation-delay: 1.6s; }
+	.light-10 { top: 55%; left: 60%; color: #ff6b6b; animation-delay: 1.8s; }
+
+	@keyframes light-flicker {
+		0%, 100% { opacity: 1; transform: scale(1); }
+		50% { opacity: 0.6; transform: scale(0.9); }
+	}
+
+	/* 响应式设计 */
+	@media (max-width: 768px) {
+		.christmas-tree {
+			width: 300px;
+			height: 450px;
+		}
+
+		.tree-star {
+			width: 45px;
+			height: 45px;
+			top: -25px;
+		}
+
+		.layer-1 .tree-branch {
+			border-left-width: 45px;
+			border-right-width: 45px;
+			border-bottom-width: 60px;
+		}
+
+		.layer-2 .tree-branch {
+			border-left-width: 60px;
+			border-right-width: 60px;
+			border-bottom-width: 75px;
+		}
+
+		.layer-3 .tree-branch {
+			border-left-width: 75px;
+			border-right-width: 75px;
+			border-bottom-width: 90px;
+		}
+
+		.layer-4 .tree-branch {
+			border-left-width: 90px;
+			border-right-width: 90px;
+			border-bottom-width: 105px;
+		}
+
+		.layer-5 .tree-branch {
+			border-left-width: 105px;
+			border-right-width: 105px;
+			border-bottom-width: 120px;
+		}
+
+		.tree-trunk {
+			width: 40px;
+			height: 60px;
+		}
+	}
+</style>
+
